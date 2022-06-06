@@ -4,7 +4,7 @@ var xhr = new XMLHttpRequest()
 
 xhr.open('GET', url1)
 
-xhr.setRequestHeader('Authorization', 'Bearer BQBMJcqtCxixlz_BFkpI39fOtDJwYZL1EemDMj6zO3OiIpbkCbLuAsfJ7wDvZPjFRynR1JMYAB0nElxxsYU')
+xhr.setRequestHeader('Authorization', 'Bearer BQCn36m2f2UVxYAglAnQNoXemeM_OB2QmOdq82MRCtOM9CpMeZnUjv5Ws7RAWAeQgGhJ3Aam8mZQ5WgEiZE')
 xhr.setRequestHeader('Accept', 'application/json')
 xhr.setRequestHeader('Content-Type', 'application/json')
 
