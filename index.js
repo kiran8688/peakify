@@ -1,10 +1,10 @@
-
+/// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
 const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`
 var xhr = new XMLHttpRequest()
 
 xhr.open('GET', url1)
 
-xhr.setRequestHeader('Authorization', 'Bearer BQCn36m2f2UVxYAglAnQNoXemeM_OB2QmOdq82MRCtOM9CpMeZnUjv5Ws7RAWAeQgGhJ3Aam8mZQ5WgEiZE')
+xhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
 xhr.setRequestHeader('Accept', 'application/json')
 xhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -78,13 +78,13 @@ xhr.onreadystatechange = () =>
 
                 document.querySelector('#cntent').style.display = "none"
 
-
+///---------------------------------MY SECOND API CALL STARTS FROM HERE----------------------------------------------------------------------
                 var newUrl = `${document.links.item(n).href}/playlists/?country=IN&limit=50&offset=0`
                 // console.log(newUrl)
                 const newXhr = new XMLHttpRequest()
                 newXhr.open('GET', newUrl, true)
 
-                newXhr.setRequestHeader('Authorization', 'Bearer BQBMJcqtCxixlz_BFkpI39fOtDJwYZL1EemDMj6zO3OiIpbkCbLuAsfJ7wDvZPjFRynR1JMYAB0nElxxsYU')
+                newXhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
                 newXhr.setRequestHeader('Accept', 'application/json')
                 newXhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -147,12 +147,13 @@ xhr.onreadystatechange = () =>
 
                                     document.querySelector('#content').style.display = "none"
 
+                                    ///--------------------------------------------MY THIRD API CALL STARTS FROM HERE----------------------------------------------
 
                                     var newUrlPlay = `${document.links.item(j).href}`
                                     const playlistXhr = new XMLHttpRequest()
                                     playlistXhr.open('GET', newUrlPlay, true)
 
-                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQBMJcqtCxixlz_BFkpI39fOtDJwYZL1EemDMj6zO3OiIpbkCbLuAsfJ7wDvZPjFRynR1JMYAB0nElxxsYU')
+                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
                                     playlistXhr.setRequestHeader('Accept', 'application/json')
                                     playlistXhr.setRequestHeader('Content-Type', 'application/json')
 
