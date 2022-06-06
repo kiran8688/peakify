@@ -1,0 +1,115 @@
+nav{
+    background-color: black;
+}
+
+#cntent {
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-around; */
+}
+
+#content{
+    display: flex;
+    flex-wrap: wrap;
+}
+#grand-cntent{
+    display: flex;
+    flex-wrap: wrap;
+}
+#playlist-card-title{
+    height: 10%;
+    /* display: block; */
+    
+}
+
+#playlist-title{
+    font-size: 80px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    /* font-stretch: expanded; */
+    
+}
+#play-img{
+    height: 232px;
+    width: 232px;
+}
+#playlist{
+    font-size: 20px;
+    font-weight: bold;
+    /* display: flex;
+    flex-wrap: wrap; */
+}
+#card{
+    height: 232px;
+}
+/* #playlist-nav{
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+} */
+/* h1{
+    display: flex;
+    float: left;
+ } */
+ #song-img{
+    height: 55px;
+    width: 50px;
+}
+#song-num{
+   width: 30px;
+
+}
+#title-head{
+    width: 560px;
+    display: flex;
+}
+#playlist-hashtag{
+    width: 70px;
+}
+#playlist-album{
+    width: 670px;
+    flex-wrap: wrap;
+}
+#playlist-artists{
+    width: 510px;
+    flex-wrap: wrap;
+    
+    
+}
+#track-lister{
+    height: 70px;
+    margin-top: 2px;
+}
+#playlist-time{
+    width: 85px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#list-tracks{
+    width: 1000px;
+}
+#list-albums{
+    width: 650px;
+    
+}
+#div-tracks{
+    width: 600px;
+    /* display: flex; */
+    flex-wrap: wrap ;
+    text-overflow: ellipsis;
+}
+#list-artists{
+    width: 700px;
+}
+#list-time{
+    width: 100px;
+}
+#album-name{
+    width: 651px;
+}
+#card{
+    width: 50vw;
+    height: 25vh;
+}
+/* #play-lister:hover{
+    <i class="bi bi-play-fill"></i>
+} */
