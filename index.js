@@ -4,7 +4,7 @@ var xhr = new XMLHttpRequest()
 
 xhr.open('GET', url1)
 
-xhr.setRequestHeader('Authorization', 'Bearer BQB19O1ZkZkoZJXvPNJ6U7fxBCH2Qfa1Ae2GNwvzdKcYgu1pg3lHg9WVDEdh7CdI4f2OUj-J7H07JyNKpJ0')
+xhr.setRequestHeader('Authorization', 'Bearer BQBWdHLB_vejUwo_w3Ugw-tkF8KiW5PE-xz54PZ3A77OkINYBgxvM7QTTC5lWTvL-dw_1H_Q62ODryspkZI')
 xhr.setRequestHeader('Accept', 'application/json')
 xhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -84,7 +84,7 @@ xhr.onreadystatechange = () =>
                 const newXhr = new XMLHttpRequest()
                 newXhr.open('GET', newUrl, true)
 
-                newXhr.setRequestHeader('Authorization', 'Bearer BQB19O1ZkZkoZJXvPNJ6U7fxBCH2Qfa1Ae2GNwvzdKcYgu1pg3lHg9WVDEdh7CdI4f2OUj-J7H07JyNKpJ0')
+                newXhr.setRequestHeader('Authorization', 'Bearer BQBWdHLB_vejUwo_w3Ugw-tkF8KiW5PE-xz54PZ3A77OkINYBgxvM7QTTC5lWTvL-dw_1H_Q62ODryspkZI')
                 newXhr.setRequestHeader('Accept', 'application/json')
                 newXhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -153,7 +153,7 @@ xhr.onreadystatechange = () =>
                                     const playlistXhr = new XMLHttpRequest()
                                     playlistXhr.open('GET', newUrlPlay, true)
 
-                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQB19O1ZkZkoZJXvPNJ6U7fxBCH2Qfa1Ae2GNwvzdKcYgu1pg3lHg9WVDEdh7CdI4f2OUj-J7H07JyNKpJ0')
+                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQBWdHLB_vejUwo_w3Ugw-tkF8KiW5PE-xz54PZ3A77OkINYBgxvM7QTTC5lWTvL-dw_1H_Q62ODryspkZI')
                                     playlistXhr.setRequestHeader('Accept', 'application/json')
                                     playlistXhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -172,16 +172,16 @@ xhr.onreadystatechange = () =>
 
                                             playlistBar = `
                                                 
-                                                <nav id="playlist-nav" class="bg-warning bg-opacity-50 shadow container-fluid  d-flex text-truncate p-5">
-                                                    <div class=""><img id="play-img" class="row shadow-lg bg-warning " src="${playlistResponse.images[0].url}" alt="..."></img></div>
-                                                    <div class=" mt-1 ms-5 ">
+                                                <nav id="playlist-nav" class="bg-warning bg-opacity-50 shadow-lg  container-fluid  d-flex text-truncate">
+                                                    <div class=""><img id="play-img" class="row shadow-lg m-5 bg-warning " src="${playlistResponse.images[0].url}" alt="..."></img></div>
+                                                    <div class=" mt-1 pt-4 ">
                                                         <div id="card" class="pt-5"><small id="playlist-card-title" class="">${playlistResponse.type}</small>
                                                             <h1 class="" id="playlist-title">${playlistResponse.name}</h1>
                                                             <p style="text-decoration: none">${playlistResponse.description}</p>
                                                             <div class="row card-footer"><a class="col-2 text-white mt-2"  href="${playlistResponse.owner.external_urls.spotify}">${playlistResponse.owner.display_name}</a><span class="col-2 mt-2">${playlistResponse.followers.total} likes</span><span class="col-2 mt-2 ms-5">${playlistResponse.tracks.items.length} songs</span></div>
                                                             </div>
                                                 </nav>
-                                                <div class="container-fluid">
+                                                <div class="container-fluid pt-3 ">
                                                     <div class="">
                                                         <table class="table table-dark list-group-items  table table-borderless text-secondary ">
                                                             <thead><br>
