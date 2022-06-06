@@ -4,7 +4,7 @@ var xhr = new XMLHttpRequest()
 
 xhr.open('GET', url1)
 
-xhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
+xhr.setRequestHeader('Authorization', 'Bearer BQBOwZUdbjkWUIAqnVqREUaDoG_MXA4nYVeX9un8HdmlRlf9NEKIDtvMerwelL4ydfuGVdQwm-ldz7LY2qM')
 xhr.setRequestHeader('Accept', 'application/json')
 xhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -84,7 +84,7 @@ xhr.onreadystatechange = () =>
                 const newXhr = new XMLHttpRequest()
                 newXhr.open('GET', newUrl, true)
 
-                newXhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
+                newXhr.setRequestHeader('Authorization', 'Bearer BQBOwZUdbjkWUIAqnVqREUaDoG_MXA4nYVeX9un8HdmlRlf9NEKIDtvMerwelL4ydfuGVdQwm-ldz7LY2qM')
                 newXhr.setRequestHeader('Accept', 'application/json')
                 newXhr.setRequestHeader('Content-Type', 'application/json')
 
@@ -153,7 +153,7 @@ xhr.onreadystatechange = () =>
                                     const playlistXhr = new XMLHttpRequest()
                                     playlistXhr.open('GET', newUrlPlay, true)
 
-                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQBEmec_VmHeq1FTIQUYFhzIXI05dtqBC1b63a1Sgd1wGtttHs9n4n053X0_9z9ccAAphAq-4oexKj4c_G8')
+                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQBOwZUdbjkWUIAqnVqREUaDoG_MXA4nYVeX9un8HdmlRlf9NEKIDtvMerwelL4ydfuGVdQwm-ldz7LY2qM')
                                     playlistXhr.setRequestHeader('Accept', 'application/json')
                                     playlistXhr.setRequestHeader('Content-Type', 'application/json')
 
