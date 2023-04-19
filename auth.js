@@ -17,6 +17,7 @@ var authOptions = {
 request.post(authOptions, function(error, response, body) {
   if (!error && response.statusCode === 200) {
       console.log(body)
+      
     // var token = body.access_token;
   }
 });
