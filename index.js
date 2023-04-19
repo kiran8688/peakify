@@ -1,45 +1,44 @@
 /// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
-const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`
-var xhr = new XMLHttpRequest()
+const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`;
+var xhr = new XMLHttpRequest();
 
-xhr.open('GET', url1)
+xhr.open("GET", url1);
 
-xhr.setRequestHeader('Authorization', 'Bearer BQADOdb4i_tE-FRskIqN-BneKhk_u1MtZnMGVZiPCkt_V8ZARMo5L4u6I7GxUsyeslkZsPvD3t_L5COTpr8')
-xhr.setRequestHeader('Accept', 'application/json')
-xhr.setRequestHeader('Content-Type', 'application/json')
+xhr.setRequestHeader(
+  "Authorization",
+  "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+);
+xhr.setRequestHeader("Accept", "application/json");
+xhr.setRequestHeader("Content-Type", "application/json");
 
-xhr.onreadystatechange = () => 
-{
+xhr.onreadystatechange = () => {
+  var output = "";
 
-    var output = ""
+  if (xhr.status === 200 && xhr.readyState === 4) {
+    const response = JSON.parse(xhr.responseText);
 
-    if (xhr.status === 200 && xhr.readyState === 4) 
-    {
-        const response = JSON.parse(xhr.responseText)
+    console.log(response);
+    var item = response.categories.items;
+    // console.log(item)
 
-        console.log(response)
-        var item = response.categories.items
-        // console.log(item)
+    let homeNav = document.createElement("nav");
+    let homeStrong = document.createElement("strong");
+    homeStrong.textContent = `# Home`;
 
+    // homeNav.setAttribute('class', 'btn bg-success border-dark text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
 
-        let homeNav = document.createElement('nav')
-        let homeStrong = document.createElement('strong')
-        homeStrong.textContent = `# Home`
+    homeNav.setAttribute(
+      "class",
+      "bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
+    );
 
-        // homeNav.setAttribute('class', 'btn bg-success border-dark text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
+    homeNav.setAttribute("id", "home-nav");
 
-        homeNav.setAttribute('class', 'bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
+    document.querySelector("#cntent").appendChild(homeNav);
+    document.querySelector("#home-nav").appendChild(homeStrong);
 
-        homeNav.setAttribute('id', 'home-nav')
-
-        document.querySelector('#cntent').appendChild(homeNav)
-        document.querySelector('#home-nav').appendChild(homeStrong)
-
-        item.forEach((icons, index) => 
-        {
-
-
-            output += `
+    item.forEach((icons, index) => {
+      output += `
             <div class="card bg-dark text-white ms-3 mb-5 rounded-4">
             
                 <a  id="${index}" href='${response.categories.items[index].href}'>
@@ -61,60 +60,59 @@ xhr.onreadystatechange = () =>
             
             </div>
             
-            `
-        })
-        document.querySelector('#cntent').innerHTML += output
+            `;
+    });
+    document.querySelector("#cntent").innerHTML += output;
 
-        // console.dir(document.links)
+    // console.dir(document.links)
 
-        for (let n = 0; n < 50; n++) 
-        {
+    for (let n = 0; n < 50; n++) {
+      document.links.item(n).addEventListener("click", (e) => {
+        e.preventDefault();
 
+        document.querySelector("#cntent").style.display = "none";
 
-            document.links.item(n).addEventListener('click', e => 
-            {
+        ///---------------------------------MY SECOND API CALL STARTS FROM HERE----------------------------------------------------------------------
+        var newUrl = `${
+          document.links.item(n).href
+        }/playlists/?country=IN&limit=50&offset=0`;
+        // console.log(newUrl)
+        const newXhr = new XMLHttpRequest();
+        newXhr.open("GET", newUrl, true);
 
-                e.preventDefault()
+        newXhr.setRequestHeader(
+          "Authorization",
+          "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+        );
+        newXhr.setRequestHeader("Accept", "application/json");
+        newXhr.setRequestHeader("Content-Type", "application/json");
 
-                document.querySelector('#cntent').style.display = "none"
+        newXhr.onreadystatechange = () => {
+          var playOutput = "";
+          if (newXhr.status === 200 && newXhr.readyState === 4) {
+            const newResponse = JSON.parse(newXhr.responseText);
+            // self.importScripts('text-index.js')
+            console.log(newResponse);
 
-///---------------------------------MY SECOND API CALL STARTS FROM HERE----------------------------------------------------------------------
-                var newUrl = `${document.links.item(n).href}/playlists/?country=IN&limit=50&offset=0`
-                // console.log(newUrl)
-                const newXhr = new XMLHttpRequest()
-                newXhr.open('GET', newUrl, true)
+            var item = newResponse.playlists.items;
+            console.log(item);
+            var catnav = document.createElement("nav");
+            var strong = document.createElement("strong");
+            strong.textContent = `# ${response.categories.items[n].name}`;
 
-                newXhr.setRequestHeader('Authorization', 'Bearer BQADOdb4i_tE-FRskIqN-BneKhk_u1MtZnMGVZiPCkt_V8ZARMo5L4u6I7GxUsyeslkZsPvD3t_L5COTpr8')
-                newXhr.setRequestHeader('Accept', 'application/json')
-                newXhr.setRequestHeader('Content-Type', 'application/json')
+            // <div class="shadow-lg p-3 mb-5 bg-body rounded">Larger shadow</div>
 
-                newXhr.onreadystatechange = () => 
-                {
-                    var playOutput = "";
-                    if (newXhr.status === 200 && newXhr.readyState === 4) 
-                    {
-                        const newResponse = JSON.parse(newXhr.responseText)
-                        // self.importScripts('text-index.js')    
-                        console.log(newResponse)
+            catnav.setAttribute(
+              "class",
+              " bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
+            );
+            catnav.setAttribute("id", "cat-nav");
 
-                        var item = newResponse.playlists.items
-                        console.log(item)
-                        var catnav = document.createElement('nav')
-                        var strong = document.createElement('strong')
-                        strong.textContent = `# ${response.categories.items[n].name}`
+            document.querySelector("#content").appendChild(catnav);
+            document.querySelector("#cat-nav").appendChild(strong);
 
-                        // <div class="shadow-lg p-3 mb-5 bg-body rounded">Larger shadow</div>
-
-                        catnav.setAttribute('class', ' bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
-                        catnav.setAttribute('id', 'cat-nav')
-
-                        document.querySelector('#content').appendChild(catnav)
-                        document.querySelector('#cat-nav').appendChild(strong)
-
-                        newResponse.playlists.items.forEach((playlist, playIndex) => 
-                        {
-
-                            playOutput = `
+            newResponse.playlists.items.forEach((playlist, playIndex) => {
+              playOutput = `
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
@@ -132,45 +130,52 @@ xhr.onreadystatechange = () =>
                                         </div>
                                         
                                         
-                                        `
+                                        `;
 
-                            document.querySelector('#content').innerHTML += playOutput
+              document.querySelector("#content").innerHTML += playOutput;
 
-                            // console.dir(document.links)
-                            for (let j = 50; j < document.links.length; j++) 
-                            {
-                                // console.log(j)
-                                document.links.item(j).addEventListener('click', e => 
-                                {
-                                    // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------                            
-                                    e.preventDefault()
+              // console.dir(document.links)
+              for (let j = 50; j < document.links.length; j++) {
+                // console.log(j)
+                document.links.item(j).addEventListener("click", (e) => {
+                  // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------
+                  e.preventDefault();
 
-                                    document.querySelector('#content').style.display = "none"
+                  document.querySelector("#content").style.display = "none";
 
-                                    ///--------------------------------------------MY THIRD API CALL STARTS FROM HERE----------------------------------------------
+                  ///--------------------------------------------MY THIRD API CALL STARTS FROM HERE----------------------------------------------
 
-                                    var newUrlPlay = `${document.links.item(j).href}`
-                                    const playlistXhr = new XMLHttpRequest()
-                                    playlistXhr.open('GET', newUrlPlay, true)
+                  var newUrlPlay = `${document.links.item(j).href}`;
+                  const playlistXhr = new XMLHttpRequest();
+                  playlistXhr.open("GET", newUrlPlay, true);
 
-                                    playlistXhr.setRequestHeader('Authorization', 'Bearer BQADOdb4i_tE-FRskIqN-BneKhk_u1MtZnMGVZiPCkt_V8ZARMo5L4u6I7GxUsyeslkZsPvD3t_L5COTpr8')
-                                    playlistXhr.setRequestHeader('Accept', 'application/json')
-                                    playlistXhr.setRequestHeader('Content-Type', 'application/json')
+                  playlistXhr.setRequestHeader(
+                    "Authorization",
+                    "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+                  );
+                  playlistXhr.setRequestHeader("Accept", "application/json");
+                  playlistXhr.setRequestHeader(
+                    "Content-Type",
+                    "application/json"
+                  );
 
-                                    playlistXhr.onreadystatechange = (index) => 
-                                    {
-                                        var playlistsOutput = "";
-                                        if (playlistXhr.status === 200 && playlistXhr.readyState === 4) 
-                                        {
-                                            const playlistResponse = JSON.parse(playlistXhr.responseText)
-                                            // self.importScripts('text-index.js')    
-                                            console.log(playlistResponse)
+                  playlistXhr.onreadystatechange = (index) => {
+                    var playlistsOutput = "";
+                    if (
+                      playlistXhr.status === 200 &&
+                      playlistXhr.readyState === 4
+                    ) {
+                      const playlistResponse = JSON.parse(
+                        playlistXhr.responseText
+                      );
+                      // self.importScripts('text-index.js')
+                      console.log(playlistResponse);
 
-                                            var tracksList = playlistResponse.tracks.items
-                                            console.log(tracksList)
-                                            var playlistBar = ''
+                      var tracksList = playlistResponse.tracks.items;
+                      console.log(tracksList);
+                      var playlistBar = "";
 
-                                            playlistBar = `
+                      playlistBar = `
                                                 
                                                 <nav id="playlist-nav" class="bg-warning bg-opacity-50 shadow-lg  container-fluid  d-flex text-truncate">
                                                     <div class=""><img id="play-img" class="row shadow-lg m-5 bg-warning " src="${playlistResponse.images[0].url}" alt="..."></img></div>
@@ -201,43 +206,94 @@ xhr.onreadystatechange = () =>
                                                         </table>
                                                     </div>
                                                 </div>
-                                                                `
-                                            // console.log(index);
-                                            document.querySelector('#grand-cntent').innerHTML += playlistBar
+                                                                `;
+                      // console.log(index);
+                      document.querySelector("#grand-cntent").innerHTML +=
+                        playlistBar;
 
-                                            var tracksOutput = ""
-                                            playlistResponse.tracks.items.forEach((tracks, index) => 
-                                            {
+                      var tracksOutput = "";
+                      playlistResponse.tracks.items.forEach((tracks, index) => {
+                        var timeMin = Math.floor(
+                          playlistResponse.tracks.items[index].track
+                            .duration_ms /
+                            1000 /
+                            60
+                        );
+                        var sec = Math.floor(
+                          (playlistResponse.tracks.items[index].track
+                            .duration_ms /
+                            1000) %
+                            60
+                        );
+                        var timeSec = sec < 10 ? sec + "0" : sec;
 
-
-                                                var timeMin = Math.floor(playlistResponse.tracks.items[index].track.duration_ms / 1000 / 60)
-                                                var sec = Math.floor((playlistResponse.tracks.items[index].track.duration_ms / 1000) % 60)
-                                                var timeSec = (sec < 10) ? (sec + '0') : sec;
-
-
-                                                var checkExplicit = playlistResponse.tracks.items[index].track.explicit
-                                                var explicit = (checkExplicit == true) ? (`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
+                        var checkExplicit =
+                          playlistResponse.tracks.items[index].track.explicit;
+                        var explicit =
+                          checkExplicit == true
+                            ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
                                                 <path d="M2.5 0A2.5 2.5 0 0 0 0 2.5v11A2.5 2.5 0 0 0 2.5 16h11a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 13.5 0h-11Zm4.326 10.88H10.5V12h-5V4.002h5v1.12H6.826V7.4h3.457v1.073H6.826v2.408Z"/>
-                                                </svg>`) : '';
+                                                </svg>`
+                            : "";
 
-
-                                                
-
-                                                tracksOutput = `
+                        tracksOutput = `
                                                 
                                                         <div id="track-lister" class="container-fluid ">
-                                                            <a style="text-decoration: none" href="${playlistResponse.tracks.items[index].track.preview_url}">
+                                                            <a style="text-decoration: none" href="${
+                                                              playlistResponse
+                                                                .tracks.items[
+                                                                index
+                                                              ].track
+                                                                .preview_url
+                                                            }">
                                                                 <div style="tezt-decoration: none" >
                                                             
                                                                     <table class="table table-dark table-hover table-borderless text-secondary">
                                                                         <thead>       
                                                                             <tbody class=" text-secondary list-group-items">
                                                                                 <tr>
-                                                                                    <th id="song-num" scope="row" class="pt-4">${index + 1}</th>
-                                                                                    <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${playlistResponse.tracks.items[index].track.album.images[0].url}"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${playlistResponse.tracks.items[index].track.name}</span></div> </th>
-                                                                                    <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${playlistResponse.tracks.items[index].track.album.name}</div></th>
-                                                                                    <th id="list-artists" class="pt-4">${playlistResponse.tracks.items[index].track.artists[0].name}</th>
-                                                                                    <th id="list-time" class="pt-4">${timeMin + ':' + timeSec}</th>
+                                                                                    <th id="song-num" scope="row" class="pt-4">${
+                                                                                      index +
+                                                                                      1
+                                                                                    }</th>
+                                                                                    <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${
+                                                                                      playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
+                                                                                        .album
+                                                                                        .images[0]
+                                                                                        .url
+                                                                                    }"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${
+                          playlistResponse.tracks.items[index].track.name
+                        }</span></div> </th>
+                                                                                    <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${
+                                                                                      playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
+                                                                                        .album
+                                                                                        .name
+                                                                                    }</div></th>
+                                                                                    <th id="list-artists" class="pt-4">${
+                                                                                      playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
+                                                                                        .artists[0]
+                                                                                        .name
+                                                                                    }</th>
+                                                                                    <th id="list-time" class="pt-4">${
+                                                                                      timeMin +
+                                                                                      ":" +
+                                                                                      timeSec
+                                                                                    }</th>
                                                                                 </tr>
                                                                             
                                                                             </tbody>
@@ -250,33 +306,21 @@ xhr.onreadystatechange = () =>
                                                             </a>
                                                         </div>
                                                                             
-                                                        `
-                                                document.querySelector('#grand-cntent').innerHTML += tracksOutput
-                                            })
-
-                                       
-                                        }
-
-                                    }
-                                    playlistXhr.send()
-                                })
-
-                            }
-
-
-                        
-                            
-                        })
-                        
-                        
+                                                        `;
+                        document.querySelector("#grand-cntent").innerHTML +=
+                          tracksOutput;
+                      });
                     }
-                }
-                newXhr.send()
-            })
-        }
-
+                  };
+                  playlistXhr.send();
+                });
+              }
+            });
+          }
+        };
+        newXhr.send();
+      });
     }
-
-
-}
-xhr.send()
+  }
+};
+xhr.send();
