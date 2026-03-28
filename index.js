@@ -121,7 +121,7 @@ xhr.onreadystatechange = () => {
             document.querySelector("#cat-nav").appendChild(strong);
 
             newResponse.playlists.items.forEach((playlist, playIndex) => {
-              playOutput = `
+              playOutput += `
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
@@ -140,10 +140,11 @@ xhr.onreadystatechange = () => {
                                         
                                         
                                         `;
+            });
 
-              document.querySelector("#content").innerHTML += playOutput;
+            document.querySelector("#content").innerHTML += playOutput;
 
-              // console.dir(document.links)
+            // console.dir(document.links)
               for (let j = 50; j < document.links.length; j++) {
                 // console.log(j)
                 document.links.item(j).addEventListener("click", (e) => {
@@ -245,7 +246,7 @@ xhr.onreadystatechange = () => {
                                                 </svg>`
                             : "";
 
-                        tracksOutput = `
+                        tracksOutput += `
                                                 
                                                         <div id="track-lister" class="container-fluid ">
                                                             <a style="text-decoration: none" href="${
@@ -316,9 +317,9 @@ xhr.onreadystatechange = () => {
                                                         </div>
                                                                             
                                                         `;
-                        document.querySelector("#grand-cntent").innerHTML +=
-                          tracksOutput;
                       });
+                      document.querySelector("#grand-cntent").innerHTML +=
+                        tracksOutput;
                     }
                   };
                   playlistXhr.send();
