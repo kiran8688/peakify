@@ -1,3 +1,12 @@
+// Add your Spotify access token here
+// For production, inject this securely through environment variables or a secure backend.
+const SPOTIFY_ACCESS_TOKEN = "";
+
+if (!SPOTIFY_ACCESS_TOKEN) {
+  console.error("Error: SPOTIFY_ACCESS_TOKEN is not defined in index.js. Please provide a valid token.");
+  // Optional: show user-friendly error message on the page.
+}
+
 /// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
 const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`;
 var xhr = new XMLHttpRequest();
@@ -6,7 +15,7 @@ xhr.open("GET", url1);
 
 xhr.setRequestHeader(
   "Authorization",
-  "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+  "Bearer " + SPOTIFY_ACCESS_TOKEN
 );
 xhr.setRequestHeader("Accept", "application/json");
 xhr.setRequestHeader("Content-Type", "application/json");
@@ -82,7 +91,7 @@ xhr.onreadystatechange = () => {
 
         newXhr.setRequestHeader(
           "Authorization",
-          "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+          "Bearer " + SPOTIFY_ACCESS_TOKEN
         );
         newXhr.setRequestHeader("Accept", "application/json");
         newXhr.setRequestHeader("Content-Type", "application/json");
@@ -152,7 +161,7 @@ xhr.onreadystatechange = () => {
 
                   playlistXhr.setRequestHeader(
                     "Authorization",
-                    "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+                    "Bearer " + SPOTIFY_ACCESS_TOKEN
                   );
                   playlistXhr.setRequestHeader("Accept", "application/json");
                   playlistXhr.setRequestHeader(
