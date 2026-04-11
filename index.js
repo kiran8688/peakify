@@ -93,6 +93,7 @@ xhr.onreadystatechange = () => {
           var playOutput = "";
           if (newXhr.status === 200 && newXhr.readyState === 4) {
             const newResponse = JSON.parse(newXhr.responseText);
+            // self.importScripts('text-index.js')
 
             var item = newResponse.playlists.items;
             var catnav = document.createElement("nav");
@@ -163,6 +164,7 @@ xhr.onreadystatechange = () => {
                       const playlistResponse = JSON.parse(
                         playlistXhr.responseText
                       );
+                      // self.importScripts('text-index.js')
 
                       var tracksList = playlistResponse.tracks.items;
                       var playlistBar = "";
