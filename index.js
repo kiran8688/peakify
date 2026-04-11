@@ -1,29 +1,75 @@
-// Add your Spotify access token here
-// For production, inject this securely through environment variables or a secure backend.
-const SPOTIFY_ACCESS_TOKEN = "";
+let SPOTIFY_ACCESS_TOKEN = "";
 
-if (!SPOTIFY_ACCESS_TOKEN) {
-  console.error("Error: SPOTIFY_ACCESS_TOKEN is not defined in index.js. Please provide a valid token.");
-  // Optional: show user-friendly error message on the page.
+async function refreshAccessToken() {
+  try {
+    const response = await fetch("http://localhost:3001/api/token");
+    const data = await response.json();
+    SPOTIFY_ACCESS_TOKEN = data.access_token;
+    // Set up next refresh in 55 minutes
+    setTimeout(refreshAccessToken, 55 * 60 * 1000);
+    return SPOTIFY_ACCESS_TOKEN;
+  } catch (error) {
+    console.error("Failed to refresh access token:", error);
+    // Retry after 1 minute on failure
+    setTimeout(refreshAccessToken, 60 * 1000);
+  }
 }
 
-/// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
-const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`;
-var xhr = new XMLHttpRequest();
+/**
+ * Escapes HTML special characters in a string to prevent XSS.
+ * @param {string} str The string to escape.
+ * @returns {string} The escaped string.
+ */
+function escapeHTML(str) {
+  if (typeof str !== "string") {
+    return str;
+  }
+  return str.replace(/[&<>"']/g, function (m) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[m];
+  });
+}
 
-xhr.open("GET", url1);
+function toggleLoader(show) {
+  const loader = document.querySelector("#loader");
+  if (loader) {
+    if (show) loader.classList.remove("d-none");
+    else loader.classList.add("d-none");
+  }
+}
 
-xhr.setRequestHeader(
-  "Authorization",
-  "Bearer " + SPOTIFY_ACCESS_TOKEN
-);
-xhr.setRequestHeader("Accept", "application/json");
-xhr.setRequestHeader("Content-Type", "application/json");
+async function init() {
+  toggleLoader(true);
+  await refreshAccessToken();
+  if (!SPOTIFY_ACCESS_TOKEN) {
+    console.error("Error: SPOTIFY_ACCESS_TOKEN is not defined. Please ensure the token server is running.");
+    toggleLoader(false);
+    return;
+  }
 
-xhr.onreadystatechange = () => {
+  /// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
+  const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`;
+  var xhr = new XMLHttpRequest();
+
+  xhr.open("GET", url1);
+
+  xhr.setRequestHeader(
+    "Authorization",
+    "Bearer " + SPOTIFY_ACCESS_TOKEN
+  );
+  xhr.setRequestHeader("Accept", "application/json");
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onreadystatechange = () => {
   var output = "";
 
   if (xhr.status === 200 && xhr.readyState === 4) {
+    toggleLoader(false);
     const response = JSON.parse(xhr.responseText);
 
     var item = response.categories.items;
@@ -46,16 +92,16 @@ xhr.onreadystatechange = () => {
       output += `
             <div class="card bg-dark text-white ms-3 mb-5 rounded-4">
             
-                <a  id="${index}" href='${icons.href}'>
+                <a  id="${index}" href='${escapeHTML(response.categories.items[index].href)}'>
             
-                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${icons.icons[0].url}"alt="...">
+                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${escapeHTML(response.categories.items[index].icons[0].url)}" alt="...">
             
                     <center>
                     <div class="card-img-overlay  "><br><br><br><br><br><br><br>
             
                         <span class="card- text-white h3">
             
-                            ${icons.name}
+                            ${escapeHTML(response.categories.items[index].name)}
             
                         </span>
             
@@ -69,9 +115,11 @@ xhr.onreadystatechange = () => {
     });
     document.querySelector("#cntent").innerHTML += output;
 
+
     for (let n = 0; n < 50; n++) {
       document.links.item(n).addEventListener("click", (e) => {
         e.preventDefault();
+        toggleLoader(true);
 
         document.querySelector("#cntent").style.display = "none";
 
@@ -92,6 +140,7 @@ xhr.onreadystatechange = () => {
         newXhr.onreadystatechange = () => {
           var playOutput = "";
           if (newXhr.status === 200 && newXhr.readyState === 4) {
+            toggleLoader(false);
             const newResponse = JSON.parse(newXhr.responseText);
             // self.importScripts('text-index.js')
 
@@ -114,12 +163,12 @@ xhr.onreadystatechange = () => {
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
-                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href=${playlist.href}>
+                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href="${escapeHTML(newResponse.playlists.items[playIndex].href)}">
                                         
-                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${playlist.images[0].url}" alt="...">
+                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${escapeHTML(newResponse.playlists.items[playIndex].images[0].url)}" alt="...">
                                                 <div class=" row  text-secondary">
                                                     <p class=" fs-6 bg-dark  container- text-light text-wrap "> 
-                                                        ${playlist.name}
+                                                        ${escapeHTML(newResponse.playlists.items[playIndex].name)}
                                                     </p>
                                         
                                                 </div>
@@ -136,6 +185,7 @@ xhr.onreadystatechange = () => {
               for (let j = 50; j < document.links.length; j++) {
                 document.links.item(j).addEventListener("click", (e) => {
                   e.preventDefault();
+                  toggleLoader(true);
 
                   document.querySelector("#content").style.display = "none";
 
@@ -161,6 +211,7 @@ xhr.onreadystatechange = () => {
                       playlistXhr.status === 200 &&
                       playlistXhr.readyState === 4
                     ) {
+                      toggleLoader(false);
                       const playlistResponse = JSON.parse(
                         playlistXhr.responseText
                       );
@@ -172,12 +223,12 @@ xhr.onreadystatechange = () => {
                       playlistBar = `
                                                 
                                                 <nav id="playlist-nav" class="bg-warning bg-opacity-50 shadow-lg  container-fluid  d-flex text-truncate">
-                                                    <div class=""><img id="play-img" class="row shadow-lg m-5 bg-warning " src="${playlistResponse.images[0].url}" alt="..."></img></div>
+                                                    <div class=""><img id="play-img" class="row shadow-lg m-5 bg-warning " src="${escapeHTML(playlistResponse.images[0].url)}" alt="..."></img></div>
                                                     <div class=" mt-1 pt-4 ">
-                                                        <div id="card" class="pt-5"><small id="playlist-card-title" class="">${playlistResponse.type}</small>
-                                                            <h1 class="" id="playlist-title">${playlistResponse.name}</h1>
-                                                            <p style="text-decoration: none">${playlistResponse.description}</p>
-                                                            <div class="row card-footer"><a class="col-2 text-white mt-2"  href="${playlistResponse.owner.external_urls.spotify}">${playlistResponse.owner.display_name}</a><span class="col-2 mt-2">${playlistResponse.followers.total} likes</span><span class="col-2 mt-2 ms-5">${playlistResponse.tracks.items.length} songs</span></div>
+                                                        <div id="card" class="pt-5"><small id="playlist-card-title" class="">${escapeHTML(playlistResponse.type)}</small>
+                                                            <h1 class="" id="playlist-title">${escapeHTML(playlistResponse.name)}</h1>
+                                                            <p style="text-decoration: none">${escapeHTML(playlistResponse.description)}</p>
+                                                            <div class="row card-footer"><a class="col-2 text-white mt-2"  href="${escapeHTML(playlistResponse.owner.external_urls.spotify)}">${escapeHTML(playlistResponse.owner.display_name)}</a><span class="col-2 mt-2">${playlistResponse.followers.total} likes</span><span class="col-2 mt-2 ms-5">${playlistResponse.tracks.items.length} songs</span></div>
                                                             </div>
                                                 </nav>
                                                 <div class="container-fluid pt-3 ">
@@ -227,7 +278,11 @@ xhr.onreadystatechange = () => {
                                                 
                                                         <div id="track-lister" class="container-fluid ">
                                                             <a style="text-decoration: none" href="${
-                                                              track.preview_url
+                                                              escapeHTML(playlistResponse
+                                                                .tracks.items[
+                                                                index
+                                                              ].track
+                                                                .preview_url)
                                                             }">
                                                                 <div style="tezt-decoration: none" >
                                                             
@@ -240,22 +295,37 @@ xhr.onreadystatechange = () => {
                                                                                       1
                                                                                     }</th>
                                                                                     <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${
-                                                                                      track
+                                                                                      escapeHTML(playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
                                                                                         .album
                                                                                         .images[0]
-                                                                                        .url
+                                                                                        .url)
                                                                                     }"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${
-                          track.name
+                          escapeHTML(playlistResponse.tracks.items[index].track.name)
                         }</span></div> </th>
                                                                                     <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${
-                                                                                      track
+                                                                                      escapeHTML(playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
                                                                                         .album
-                                                                                        .name
+                                                                                        .name)
                                                                                     }</div></th>
                                                                                     <th id="list-artists" class="pt-4">${
-                                                                                      track
+                                                                                      escapeHTML(playlistResponse
+                                                                                        .tracks
+                                                                                        .items[
+                                                                                        index
+                                                                                      ]
+                                                                                        .track
                                                                                         .artists[0]
-                                                                                        .name
+                                                                                        .name)
                                                                                     }</th>
                                                                                     <th id="list-time" class="pt-4">${
                                                                                       timeMin +
@@ -283,12 +353,14 @@ xhr.onreadystatechange = () => {
                   playlistXhr.send();
                 });
               }
-            });
+            }
           }
-        };
+        });
         newXhr.send();
-      });
+      }
     }
   }
-};
-xhr.send();
+  xhr.send();
+}
+
+init();

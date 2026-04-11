@@ -4,7 +4,9 @@
   "description": "",
   "main": "auth.js",
   "scripts": {
-    "test": "node --test auth.test.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-auth": "node auth.js",
+    "start-app": "python3 -m http.server 8000"
   },
   "keywords": [],
   "author": "",
