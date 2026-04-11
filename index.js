@@ -145,7 +145,7 @@ xhr.onreadystatechange = () => {
             document.querySelector("#content").innerHTML += playOutput;
 
             // console.dir(document.links)
-              for (let j = 50; j < document.links.length; j++) {
+              for (let j = 50, len = document.links.length; j < len; j++) {
                 // console.log(j)
                 document.links.item(j).addEventListener("click", (e) => {
                   // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------
