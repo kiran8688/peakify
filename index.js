@@ -1,3 +1,12 @@
+// Add your Spotify access token here
+// For production, inject this securely through environment variables or a secure backend.
+const SPOTIFY_ACCESS_TOKEN = "";
+
+if (!SPOTIFY_ACCESS_TOKEN) {
+  console.error("Error: SPOTIFY_ACCESS_TOKEN is not defined in index.js. Please provide a valid token.");
+  // Optional: show user-friendly error message on the page.
+}
+
 /// ----------------------------------------MY FIRST API CALL STARTS HERE---------------------------------------------------------
 const url1 = `https://api.spotify.com/v1/browse/categories?country=IN&limit=50&offindexet=0`;
 var xhr = new XMLHttpRequest();
@@ -6,7 +15,7 @@ xhr.open("GET", url1);
 
 xhr.setRequestHeader(
   "Authorization",
-  "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+  "Bearer " + SPOTIFY_ACCESS_TOKEN
 );
 xhr.setRequestHeader("Accept", "application/json");
 xhr.setRequestHeader("Content-Type", "application/json");
@@ -17,15 +26,11 @@ xhr.onreadystatechange = () => {
   if (xhr.status === 200 && xhr.readyState === 4) {
     const response = JSON.parse(xhr.responseText);
 
-    console.log(response);
     var item = response.categories.items;
-    // console.log(item)
 
     let homeNav = document.createElement("nav");
     let homeStrong = document.createElement("strong");
     homeStrong.textContent = `# Home`;
-
-    // homeNav.setAttribute('class', 'btn bg-success border-dark text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
 
     homeNav.setAttribute(
       "class",
@@ -41,16 +46,16 @@ xhr.onreadystatechange = () => {
       output += `
             <div class="card bg-dark text-white ms-3 mb-5 rounded-4">
             
-                <a  id="${index}" href='${response.categories.items[index].href}'>
+                <a  id="${index}" href='${icons.href}'>
             
-                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${response.categories.items[index].icons[0].url}"alt="...">
+                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${icons.icons[0].url}"alt="...">
             
                     <center>
                     <div class="card-img-overlay  "><br><br><br><br><br><br><br>
             
                         <span class="card- text-white h3">
             
-                            ${response.categories.items[index].name}
+                            ${icons.name}
             
                         </span>
             
@@ -64,8 +69,6 @@ xhr.onreadystatechange = () => {
     });
     document.querySelector("#cntent").innerHTML += output;
 
-    // console.dir(document.links)
-
     for (let n = 0; n < 50; n++) {
       document.links.item(n).addEventListener("click", (e) => {
         e.preventDefault();
@@ -76,13 +79,12 @@ xhr.onreadystatechange = () => {
         var newUrl = `${
           document.links.item(n).href
         }/playlists/?country=IN&limit=50&offset=0`;
-        // console.log(newUrl)
         const newXhr = new XMLHttpRequest();
         newXhr.open("GET", newUrl, true);
 
         newXhr.setRequestHeader(
           "Authorization",
-          "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+          "Bearer " + SPOTIFY_ACCESS_TOKEN
         );
         newXhr.setRequestHeader("Accept", "application/json");
         newXhr.setRequestHeader("Content-Type", "application/json");
@@ -91,16 +93,11 @@ xhr.onreadystatechange = () => {
           var playOutput = "";
           if (newXhr.status === 200 && newXhr.readyState === 4) {
             const newResponse = JSON.parse(newXhr.responseText);
-            // self.importScripts('text-index.js')
-            console.log(newResponse);
 
             var item = newResponse.playlists.items;
-            console.log(item);
             var catnav = document.createElement("nav");
             var strong = document.createElement("strong");
             strong.textContent = `# ${response.categories.items[n].name}`;
-
-            // <div class="shadow-lg p-3 mb-5 bg-body rounded">Larger shadow</div>
 
             catnav.setAttribute(
               "class",
@@ -116,12 +113,12 @@ xhr.onreadystatechange = () => {
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
-                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href=${newResponse.playlists.items[playIndex].href}>
+                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href=${playlist.href}>
                                         
-                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${newResponse.playlists.items[playIndex].images[0].url}" alt="...">
+                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${playlist.images[0].url}" alt="...">
                                                 <div class=" row  text-secondary">
                                                     <p class=" fs-6 bg-dark  container- text-light text-wrap "> 
-                                                        ${newResponse.playlists.items[playIndex].name}
+                                                        ${playlist.name}
                                                     </p>
                                         
                                                 </div>
@@ -135,11 +132,8 @@ xhr.onreadystatechange = () => {
 
             document.querySelector("#content").innerHTML += playOutput;
 
-            // console.dir(document.links)
               for (let j = 50; j < document.links.length; j++) {
-                // console.log(j)
                 document.links.item(j).addEventListener("click", (e) => {
-                  // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------
                   e.preventDefault();
 
                   document.querySelector("#content").style.display = "none";
@@ -152,7 +146,7 @@ xhr.onreadystatechange = () => {
 
                   playlistXhr.setRequestHeader(
                     "Authorization",
-                    "Bearer BQDjKY6TMqi5CKSecSszrfTMfb5NS2FHlyObH2ionchl-SF6k8IAO0ZOL3I0uDzjP_0hYAofmiRNfkUBeELPg2dfX_xFYUbh0hLNbTKQCy0U4W3Dnxce"
+                    "Bearer " + SPOTIFY_ACCESS_TOKEN
                   );
                   playlistXhr.setRequestHeader("Accept", "application/json");
                   playlistXhr.setRequestHeader(
@@ -169,11 +163,8 @@ xhr.onreadystatechange = () => {
                       const playlistResponse = JSON.parse(
                         playlistXhr.responseText
                       );
-                      // self.importScripts('text-index.js')
-                      console.log(playlistResponse);
 
                       var tracksList = playlistResponse.tracks.items;
-                      console.log(tracksList);
                       var playlistBar = "";
 
                       playlistBar = `
@@ -208,28 +199,21 @@ xhr.onreadystatechange = () => {
                                                     </div>
                                                 </div>
                                                                 `;
-                      // console.log(index);
                       document.querySelector("#grand-cntent").innerHTML +=
                         playlistBar;
 
                       var tracksOutput = "";
                       playlistResponse.tracks.items.forEach((tracks, index) => {
+                        var track = tracks.track;
                         var timeMin = Math.floor(
-                          playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000 /
-                            60
+                          track.duration_ms / 1000 / 60
                         );
                         var sec = Math.floor(
-                          (playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000) %
-                            60
+                          (track.duration_ms / 1000) % 60
                         );
                         var timeSec = sec < 10 ? sec + "0" : sec;
 
-                        var checkExplicit =
-                          playlistResponse.tracks.items[index].track.explicit;
+                        var checkExplicit = track.explicit;
                         var explicit =
                           checkExplicit == true
                             ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
@@ -241,11 +225,7 @@ xhr.onreadystatechange = () => {
                                                 
                                                         <div id="track-lister" class="container-fluid ">
                                                             <a style="text-decoration: none" href="${
-                                                              playlistResponse
-                                                                .tracks.items[
-                                                                index
-                                                              ].track
-                                                                .preview_url
+                                                              track.preview_url
                                                             }">
                                                                 <div style="tezt-decoration: none" >
                                                             
@@ -258,35 +238,20 @@ xhr.onreadystatechange = () => {
                                                                                       1
                                                                                     }</th>
                                                                                     <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .album
                                                                                         .images[0]
                                                                                         .url
                                                                                     }"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${
-                          playlistResponse.tracks.items[index].track.name
+                          track.name
                         }</span></div> </th>
                                                                                     <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .album
                                                                                         .name
                                                                                     }</div></th>
                                                                                     <th id="list-artists" class="pt-4">${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .artists[0]
                                                                                         .name
                                                                                     }</th>
