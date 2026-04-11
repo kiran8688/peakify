@@ -6,11 +6,6 @@ var request = require('request')
 var client_id = process.env.SPOTIFY_CLIENT_ID;
 var client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-if (!client_id || !client_secret) {
-  console.error("Error: SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET environment variables are not set.");
-  process.exit(1);
-}
-
 var authOptions = {
   url: 'https://accounts.spotify.com/api/token',
   headers: {
