@@ -26,15 +26,11 @@ xhr.onreadystatechange = () => {
   if (xhr.status === 200 && xhr.readyState === 4) {
     const response = JSON.parse(xhr.responseText);
 
-    console.log(response);
     var item = response.categories.items;
-    // console.log(item)
 
     let homeNav = document.createElement("nav");
     let homeStrong = document.createElement("strong");
     homeStrong.textContent = `# Home`;
-
-    // homeNav.setAttribute('class', 'btn bg-success border-dark text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
 
     homeNav.setAttribute(
       "class",
@@ -73,8 +69,6 @@ xhr.onreadystatechange = () => {
     });
     document.querySelector("#cntent").innerHTML += output;
 
-    // console.dir(document.links)
-
     for (let n = 0; n < 50; n++) {
       document.links.item(n).addEventListener("click", (e) => {
         e.preventDefault();
@@ -85,7 +79,6 @@ xhr.onreadystatechange = () => {
         var newUrl = `${
           document.links.item(n).href
         }/playlists/?country=IN&limit=50&offset=0`;
-        // console.log(newUrl)
         const newXhr = new XMLHttpRequest();
         newXhr.open("GET", newUrl, true);
 
@@ -100,16 +93,11 @@ xhr.onreadystatechange = () => {
           var playOutput = "";
           if (newXhr.status === 200 && newXhr.readyState === 4) {
             const newResponse = JSON.parse(newXhr.responseText);
-            // self.importScripts('text-index.js')
-            console.log(newResponse);
 
             var item = newResponse.playlists.items;
-            console.log(item);
             var catnav = document.createElement("nav");
             var strong = document.createElement("strong");
             strong.textContent = `# ${response.categories.items[n].name}`;
-
-            // <div class="shadow-lg p-3 mb-5 bg-body rounded">Larger shadow</div>
 
             catnav.setAttribute(
               "class",
@@ -144,11 +132,8 @@ xhr.onreadystatechange = () => {
 
             document.querySelector("#content").innerHTML += playOutput;
 
-            // console.dir(document.links)
-              for (let j = 50, len = document.links.length; j < len; j++) {
-                // console.log(j)
+              for (let j = 50; j < document.links.length; j++) {
                 document.links.item(j).addEventListener("click", (e) => {
-                  // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------
                   e.preventDefault();
 
                   document.querySelector("#content").style.display = "none";
@@ -178,11 +163,8 @@ xhr.onreadystatechange = () => {
                       const playlistResponse = JSON.parse(
                         playlistXhr.responseText
                       );
-                      // self.importScripts('text-index.js')
-                      console.log(playlistResponse);
 
                       var tracksList = playlistResponse.tracks.items;
-                      console.log(tracksList);
                       var playlistBar = "";
 
                       playlistBar = `
@@ -217,7 +199,6 @@ xhr.onreadystatechange = () => {
                                                     </div>
                                                 </div>
                                                                 `;
-                      // console.log(index);
                       document.querySelector("#grand-cntent").innerHTML +=
                         playlistBar;
 
