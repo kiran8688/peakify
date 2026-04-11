@@ -46,16 +46,16 @@ xhr.onreadystatechange = () => {
       output += `
             <div class="card bg-dark text-white ms-3 mb-5 rounded-4">
             
-                <a  id="${index}" href='${response.categories.items[index].href}'>
+                <a  id="${index}" href='${icons.href}'>
             
-                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${response.categories.items[index].icons[0].url}"alt="...">
+                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${icons.icons[0].url}"alt="...">
             
                     <center>
                     <div class="card-img-overlay  "><br><br><br><br><br><br><br>
             
                         <span class="card- text-white h3">
             
-                            ${response.categories.items[index].name}
+                            ${icons.name}
             
                         </span>
             
@@ -113,12 +113,12 @@ xhr.onreadystatechange = () => {
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
-                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href=${newResponse.playlists.items[playIndex].href}>
+                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href=${playlist.href}>
                                         
-                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${newResponse.playlists.items[playIndex].images[0].url}" alt="...">
+                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${playlist.images[0].url}" alt="...">
                                                 <div class=" row  text-secondary">
                                                     <p class=" fs-6 bg-dark  container- text-light text-wrap "> 
-                                                        ${newResponse.playlists.items[playIndex].name}
+                                                        ${playlist.name}
                                                     </p>
                                         
                                                 </div>
@@ -204,22 +204,16 @@ xhr.onreadystatechange = () => {
 
                       var tracksOutput = "";
                       playlistResponse.tracks.items.forEach((tracks, index) => {
+                        var track = tracks.track;
                         var timeMin = Math.floor(
-                          playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000 /
-                            60
+                          track.duration_ms / 1000 / 60
                         );
                         var sec = Math.floor(
-                          (playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000) %
-                            60
+                          (track.duration_ms / 1000) % 60
                         );
                         var timeSec = sec < 10 ? sec + "0" : sec;
 
-                        var checkExplicit =
-                          playlistResponse.tracks.items[index].track.explicit;
+                        var checkExplicit = track.explicit;
                         var explicit =
                           checkExplicit == true
                             ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
@@ -231,11 +225,7 @@ xhr.onreadystatechange = () => {
                                                 
                                                         <div id="track-lister" class="container-fluid ">
                                                             <a style="text-decoration: none" href="${
-                                                              playlistResponse
-                                                                .tracks.items[
-                                                                index
-                                                              ].track
-                                                                .preview_url
+                                                              track.preview_url
                                                             }">
                                                                 <div style="tezt-decoration: none" >
                                                             
@@ -248,35 +238,20 @@ xhr.onreadystatechange = () => {
                                                                                       1
                                                                                     }</th>
                                                                                     <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .album
                                                                                         .images[0]
                                                                                         .url
                                                                                     }"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${
-                          playlistResponse.tracks.items[index].track.name
+                          track.name
                         }</span></div> </th>
                                                                                     <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .album
                                                                                         .name
                                                                                     }</div></th>
                                                                                     <th id="list-artists" class="pt-4">${
-                                                                                      playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
+                                                                                      track
                                                                                         .artists[0]
                                                                                         .name
                                                                                     }</th>
