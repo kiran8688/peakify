@@ -78,8 +78,6 @@ async function init() {
     let homeStrong = document.createElement("strong");
     homeStrong.textContent = `# Home`;
 
-    // homeNav.setAttribute('class', 'btn bg-success border-dark text-white container-fluid  p-5 fs-1 shadow-lg mb-5')
-
     homeNav.setAttribute(
       "class",
       "bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
@@ -151,8 +149,6 @@ async function init() {
             var strong = document.createElement("strong");
             strong.textContent = `# ${response.categories.items[n].name}`;
 
-            // <div class="shadow-lg p-3 mb-5 bg-body rounded">Larger shadow</div>
-
             catnav.setAttribute(
               "class",
               " bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
@@ -188,7 +184,6 @@ async function init() {
 
               for (let j = 50; j < document.links.length; j++) {
                 document.links.item(j).addEventListener("click", (e) => {
-                  // --------------------------------------   // homeNav.setAttribute('style', 'height: 12%') playlist header  ----------------------------------------------------------------------------------------
                   e.preventDefault();
                   toggleLoader(true);
 
@@ -262,22 +257,16 @@ async function init() {
 
                       var tracksOutput = "";
                       playlistResponse.tracks.items.forEach((tracks, index) => {
+                        var track = tracks.track;
                         var timeMin = Math.floor(
-                          playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000 /
-                            60
+                          track.duration_ms / 1000 / 60
                         );
                         var sec = Math.floor(
-                          (playlistResponse.tracks.items[index].track
-                            .duration_ms /
-                            1000) %
-                            60
+                          (track.duration_ms / 1000) % 60
                         );
                         var timeSec = sec < 10 ? sec + "0" : sec;
 
-                        var checkExplicit =
-                          playlistResponse.tracks.items[index].track.explicit;
+                        var checkExplicit = track.explicit;
                         var explicit =
                           checkExplicit == true
                             ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
