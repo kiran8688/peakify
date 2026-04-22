@@ -1,6 +1,4 @@
 const http = require('http');
-const https = require('https');
-const querystring = require('querystring');
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -19,51 +17,36 @@ function getSpotifyToken(callback) {
     return callback(null, cachedToken);
   }
 
-  const authData = querystring.stringify({
+  const authData = new URLSearchParams({
     grant_type: 'client_credentials'
   });
 
-  const options = {
-    hostname: 'accounts.spotify.com',
-    port: 443,
-    path: '/api/token',
+  fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
       'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret).toString('base64'),
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': Buffer.byteLength(authData)
-    }
-  };
-
-  const req = https.request(options, (res) => {
-    let data = '';
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-    res.on('end', () => {
-      if (res.statusCode === 200) {
-        try {
-          const body = JSON.parse(data);
-          cachedToken = body.access_token;
-          tokenExpiry = Date.now() + (body.expires_in - 60) * 1000;
-          console.log("Token refreshed successfully");
-          callback(null, cachedToken);
-        } catch (e) {
-          callback(e);
-        }
-      } else {
-        callback(new Error(`Failed to fetch token: ${res.statusCode} ${data}`));
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: authData.toString()
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
       }
+      return res.text().then(text => {
+        throw new Error(`Failed to fetch token: ${res.status} ${text}`);
+      });
+    })
+    .then(body => {
+      cachedToken = body.access_token;
+      tokenExpiry = Date.now() + (body.expires_in - 60) * 1000;
+      console.log("Token refreshed successfully");
+      callback(null, cachedToken);
+    })
+    .catch(e => {
+      console.error("Error fetching token:", e);
+      callback(e);
     });
-  });
-
-  req.on('error', (e) => {
-    console.error("Error fetching token:", e);
-    callback(e);
-  });
-
-  req.write(authData);
-  req.end();
 }
 
 const server = http.createServer((req, res) => {
