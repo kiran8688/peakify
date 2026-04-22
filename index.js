@@ -35,8 +35,9 @@ function escapeHTML(str) {
   });
 }
 
+let loader;
 function toggleLoader(show) {
-  const loader = document.querySelector("#loader");
+  if (!loader) loader = document.querySelector("#loader");
   if (loader) {
     if (show) loader.classList.remove("d-none");
     else loader.classList.add("d-none");
@@ -44,6 +45,10 @@ function toggleLoader(show) {
 }
 
 async function init() {
+  const cntent = document.querySelector("#cntent");
+  const content = document.querySelector("#content");
+  const grandCntent = document.querySelector("#grand-cntent");
+
   toggleLoader(true);
   await refreshAccessToken();
   if (!SPOTIFY_ACCESS_TOKEN) {
@@ -66,42 +71,41 @@ async function init() {
   xhr.setRequestHeader("Content-Type", "application/json");
 
   xhr.onreadystatechange = () => {
-  var output = "";
+    if (xhr.status === 200 && xhr.readyState === 4) {
+      toggleLoader(false);
+      var response = JSON.parse(xhr.responseText);
 
-  if (xhr.status === 200 && xhr.readyState === 4) {
-    toggleLoader(false);
-    const response = JSON.parse(xhr.responseText);
+      var item = response.categories.items;
 
-    var item = response.categories.items;
+      let homeNav = document.createElement("nav");
+      let homeStrong = document.createElement("strong");
+      homeStrong.textContent = `# Home`;
 
-    let homeNav = document.createElement("nav");
-    let homeStrong = document.createElement("strong");
-    homeStrong.textContent = `# Home`;
+      homeNav.setAttribute(
+        "class",
+        "bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
+      );
 
-    homeNav.setAttribute(
-      "class",
-      "bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
-    );
+      homeNav.setAttribute("id", "home-nav");
 
-    homeNav.setAttribute("id", "home-nav");
+      cntent.appendChild(homeNav);
+      homeNav.appendChild(homeStrong);
 
-    document.querySelector("#cntent").appendChild(homeNav);
-    document.querySelector("#home-nav").appendChild(homeStrong);
-
-    item.forEach((icons, index) => {
-      output += `
+      var output = "";
+      item.forEach((icons, index) => {
+        output += `
             <div class="card bg-dark text-white ms-3 mb-5 rounded-4">
             
-                <a  id="${index}" href='${escapeHTML(response.categories.items[index].href)}'>
+                <a  id="${index}" href='${escapeHTML(item[index].href)}'>
             
-                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${escapeHTML(response.categories.items[index].icons[0].url)}" alt="...">
+                    <img  id="cat-link" class= 'card-img shadow rounded-4' src="${escapeHTML(item[index].icons[0].url)}" alt="...">
             
                     <center>
                     <div class="card-img-overlay  "><br><br><br><br><br><br><br>
             
                         <span class="card- text-white h3">
             
-                            ${escapeHTML(response.categories.items[index].name)}
+                            ${escapeHTML(item[index].name)}
             
                         </span>
             
@@ -112,63 +116,63 @@ async function init() {
             </div>
             
             `;
-    });
-    document.querySelector("#cntent").innerHTML += output;
+      });
+      cntent.insertAdjacentHTML('beforeend', output);
 
 
-    for (let n = 0; n < 50; n++) {
-      document.links.item(n).addEventListener("click", (e) => {
-        e.preventDefault();
-        toggleLoader(true);
+      for (let n = 0; n < item.length; n++) {
+        document.links.item(n).addEventListener("click", (e) => {
+          e.preventDefault();
+          toggleLoader(true);
 
-        document.querySelector("#cntent").style.display = "none";
+          cntent.style.display = "none";
 
-        ///---------------------------------MY SECOND API CALL STARTS FROM HERE----------------------------------------------------------------------
-        var newUrl = `${
-          document.links.item(n).href
-        }/playlists/?country=IN&limit=50&offset=0`;
-        const newXhr = new XMLHttpRequest();
-        newXhr.open("GET", newUrl, true);
+          ///---------------------------------MY SECOND API CALL STARTS FROM HERE----------------------------------------------------------------------
+          var newUrl = `${
+            document.links.item(n).href
+          }/playlists/?country=IN&limit=50&offset=0`;
+          const newXhr = new XMLHttpRequest();
+          newXhr.open("GET", newUrl, true);
 
-        newXhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + SPOTIFY_ACCESS_TOKEN
-        );
-        newXhr.setRequestHeader("Accept", "application/json");
-        newXhr.setRequestHeader("Content-Type", "application/json");
+          newXhr.setRequestHeader(
+            "Authorization",
+            "Bearer " + SPOTIFY_ACCESS_TOKEN
+          );
+          newXhr.setRequestHeader("Accept", "application/json");
+          newXhr.setRequestHeader("Content-Type", "application/json");
 
-        newXhr.onreadystatechange = () => {
-          var playOutput = "";
-          if (newXhr.status === 200 && newXhr.readyState === 4) {
-            toggleLoader(false);
-            const newResponse = JSON.parse(newXhr.responseText);
-            // self.importScripts('text-index.js')
+          newXhr.onreadystatechange = () => {
+            if (newXhr.status === 200 && newXhr.readyState === 4) {
+              toggleLoader(false);
+              const newResponse = JSON.parse(newXhr.responseText);
+              // self.importScripts('text-index.js')
 
-            var item = newResponse.playlists.items;
-            var catnav = document.createElement("nav");
-            var strong = document.createElement("strong");
-            strong.textContent = `# ${response.categories.items[n].name}`;
+              var playlists = newResponse.playlists.items;
+              var catnav = document.createElement("nav");
+              var strong = document.createElement("strong");
+              strong.textContent = `# ${item[n].name}`;
 
-            catnav.setAttribute(
-              "class",
-              " bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
-            );
-            catnav.setAttribute("id", "cat-nav");
+              catnav.setAttribute(
+                "class",
+                " bg-success bg-opacity-50 text-white container-fluid  p-5 fs-1 shadow-lg mb-5"
+              );
+              catnav.setAttribute("id", "cat-nav");
 
-            document.querySelector("#content").appendChild(catnav);
-            document.querySelector("#cat-nav").appendChild(strong);
+              content.appendChild(catnav);
+              catnav.appendChild(strong);
 
-            newResponse.playlists.items.forEach((playlist, playIndex) => {
-              playOutput += `
+              var playOutput = "";
+              playlists.forEach((playlist, playIndex) => {
+                playOutput += `
 
                                         
                                         <div style="width: 200px"  class=" border-dark card bg-dark text-white shadow p-3 ms-3  mb-5">
-                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href="${escapeHTML(newResponse.playlists.items[playIndex].href)}">
+                                            <a  id="playlist'${playIndex}'" style="text-decoration: none" href="${escapeHTML(playlist.href)}">
                                         
-                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${escapeHTML(newResponse.playlists.items[playIndex].images[0].url)}" alt="...">
+                                                <img  id="cat-link" class= 'card-img mb-4 shadow' src="${escapeHTML(playlist.images[0].url)}" alt="...">
                                                 <div class=" row  text-secondary">
                                                     <p class=" fs-6 bg-dark  container- text-light text-wrap "> 
-                                                        ${escapeHTML(newResponse.playlists.items[playIndex].name)}
+                                                        ${escapeHTML(playlist.name)}
                                                     </p>
                                         
                                                 </div>
@@ -178,16 +182,16 @@ async function init() {
                                         
                                         
                                         `;
-            });
+              });
 
-            document.querySelector("#content").innerHTML += playOutput;
+              content.insertAdjacentHTML('beforeend', playOutput);
 
-              for (let j = 50; j < document.links.length; j++) {
+              for (let j = item.length; j < document.links.length; j++) {
                 document.links.item(j).addEventListener("click", (e) => {
                   e.preventDefault();
                   toggleLoader(true);
 
-                  document.querySelector("#content").style.display = "none";
+                  content.style.display = "none";
 
                   ///--------------------------------------------MY THIRD API CALL STARTS FROM HERE----------------------------------------------
 
@@ -205,8 +209,7 @@ async function init() {
                     "application/json"
                   );
 
-                  playlistXhr.onreadystatechange = (index) => {
-                    var playlistsOutput = "";
+                  playlistXhr.onreadystatechange = () => {
                     if (
                       playlistXhr.status === 200 &&
                       playlistXhr.readyState === 4
@@ -218,9 +221,7 @@ async function init() {
                       // self.importScripts('text-index.js')
 
                       var tracksList = playlistResponse.tracks.items;
-                      var playlistBar = "";
-
-                      playlistBar = `
+                      var playlistBar = `
                                                 
                                                 <nav id="playlist-nav" class="bg-warning bg-opacity-50 shadow-lg  container-fluid  d-flex text-truncate">
                                                     <div class=""><img id="play-img" class="row shadow-lg m-5 bg-warning " src="${escapeHTML(playlistResponse.images[0].url)}" alt="..."></img></div>
@@ -252,11 +253,9 @@ async function init() {
                                                     </div>
                                                 </div>
                                                                 `;
-                      document.querySelector("#grand-cntent").innerHTML +=
-                        playlistBar;
 
                       var tracksOutput = "";
-                      playlistResponse.tracks.items.forEach((tracks, index) => {
+                      tracksList.forEach((tracks, index) => {
                         var track = tracks.track;
                         var timeMin = Math.floor(
                           track.duration_ms / 1000 / 60
@@ -264,11 +263,9 @@ async function init() {
                         var sec = Math.floor(
                           (track.duration_ms / 1000) % 60
                         );
-                        var timeSec = sec < 10 ? sec + "0" : sec;
+                        var timeSec = sec < 10 ? "0" + sec : sec;
 
-                        var checkExplicit = track.explicit;
-                        var explicit =
-                          checkExplicit == true
+                        var explicit = track.explicit
                             ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-explicit-fill" viewBox="0 0 16 16">
                                                 <path d="M2.5 0A2.5 2.5 0 0 0 0 2.5v11A2.5 2.5 0 0 0 2.5 16h11a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 13.5 0h-11Zm4.326 10.88H10.5V12h-5V4.002h5v1.12H6.826V7.4h3.457v1.073H6.826v2.408Z"/>
                                                 </svg>`
@@ -278,11 +275,7 @@ async function init() {
                                                 
                                                         <div id="track-lister" class="container-fluid ">
                                                             <a style="text-decoration: none" href="${
-                                                              escapeHTML(playlistResponse
-                                                                .tracks.items[
-                                                                index
-                                                              ].track
-                                                                .preview_url)
+                                                              escapeHTML(track.preview_url)
                                                             }">
                                                                 <div style="tezt-decoration: none" >
                                                             
@@ -295,37 +288,15 @@ async function init() {
                                                                                       1
                                                                                     }</th>
                                                                                     <th class="d-flex pt-2 mb-3" id="div-tracks"  scope="rowgroup " ><div class=""><img id="song-img" class="img-overlay shadow-lg mb-2 " src="${
-                                                                                      escapeHTML(playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
-                                                                                        .album
-                                                                                        .images[0]
-                                                                                        .url)
+                                                                                      escapeHTML(track.album.images[0].url)
                                                                                     }"  alt=""></img><span class="pb-5 ms-3 mb-5">${explicit}</span><span id="list-tracks" class="col-2 ms-2">${
-                          escapeHTML(playlistResponse.tracks.items[index].track.name)
+                          escapeHTML(track.name)
                         }</span></div> </th>
                                                                                     <th id="list-albums" class="pt-4"><div class"col-1 text-truncate" id="album-name">${
-                                                                                      escapeHTML(playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
-                                                                                        .album
-                                                                                        .name)
+                                                                                      escapeHTML(track.album.name)
                                                                                     }</div></th>
                                                                                     <th id="list-artists" class="pt-4">${
-                                                                                      escapeHTML(playlistResponse
-                                                                                        .tracks
-                                                                                        .items[
-                                                                                        index
-                                                                                      ]
-                                                                                        .track
-                                                                                        .artists[0]
-                                                                                        .name)
+                                                                                      escapeHTML(track.artists[0].name)
                                                                                     }</th>
                                                                                     <th id="list-time" class="pt-4">${
                                                                                       timeMin +
@@ -346,20 +317,19 @@ async function init() {
                                                                             
                                                         `;
                       });
-                      document.querySelector("#grand-cntent").innerHTML +=
-                        tracksOutput;
+                      grandCntent.insertAdjacentHTML('beforeend', playlistBar + tracksOutput);
                     }
                   };
                   playlistXhr.send();
                 });
               }
             }
-          }
+          };
+          newXhr.send();
         });
-        newXhr.send();
       }
     }
-  }
+  };
   xhr.send();
 }
 
